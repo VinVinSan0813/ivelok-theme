@@ -251,26 +251,6 @@
       </div><!-- /animate-from-right -->
     </div><!-- /product-layout -->
 
-    <!-- ── Product Description (below tabs) ── -->
-    {%- if product.description != blank or features != blank -%}
-      <div class="pdp-description-section">
-        {%- if product.description != blank -%}
-          <h2 class="pdp-description-section__title">About This Product</h2>
-          <div class="pdp-description-section__body">{{ product.description | strip_html }}</div>
-        {%- endif -%}
-        {%- if features != blank -%}
-          <h3 class="pdp-description-section__subtitle">Key Features</h3>
-          <ul class="product-features__list">
-            {%- for feature in features -%}
-              <li class="product-features__item">
-                <svg class="product-features__check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                <span class="product-features__text">{{ feature }}</span>
-              </li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
 
 
   </div>
