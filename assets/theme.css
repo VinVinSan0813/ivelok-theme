@@ -2242,10 +2242,8 @@ h4 {
 
 /* ── PC Detail Images ── */
 #product-detail-images {
-  margin-top: 3rem;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  width: 100vw;
+  margin-top: 0;
+  width: 100%;
   line-height: 0;
   font-size: 0;
 }

@@ -326,22 +326,23 @@
       </div>
     {%- endif -%}
 
-    {%- assign detail_images_pc = product.metafields.custom.detail_images_pc.value -%}
-    {%- if detail_images_pc != blank -%}
-      <div id="product-detail-images">
-        {%- for img in detail_images_pc -%}
-          <img
-            src="{{ img | image_url: width: 1920 }}"
-            alt="{{ product.title | escape }} detail {{ forloop.index }}"
-            loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-            width="1920"
-          >
-        {%- endfor -%}
-      </div>
-    {%- endif -%}
 
   </div>
 </div>
+
+{%- assign detail_images_pc = product.metafields.custom.detail_images_pc.value -%}
+{%- if detail_images_pc != blank -%}
+  <div id="product-detail-images">
+    {%- for img in detail_images_pc -%}
+      <img
+        src="{{ img | image_url: width: 1920 }}"
+        alt="{{ product.title | escape }} detail {{ forloop.index }}"
+        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+        width="1920"
+      >
+    {%- endfor -%}
+  </div>
+{%- endif -%}
 
 <script>
 (function () {
