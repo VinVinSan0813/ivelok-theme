@@ -1448,12 +1448,12 @@ h4 {
    ============================================ */
 .product-page {
   padding-top: 6rem;
-  padding-bottom: 3rem;
+  padding-bottom: 0;
 }
 
 /* Prevent horizontal scrollbar from product page content */
 .product-page .container {
-  overflow-x: hidden;
+  overflow: clip;
 }
 
 .product-layout > * {
@@ -1480,7 +1480,7 @@ h4 {
   display: grid;
   grid-template-columns: 1fr;
   gap: 3rem;
-  margin-bottom: 5rem;
+  margin-bottom: 0;
 }
 
 @media (min-width: 1024px) {
