@@ -251,60 +251,6 @@
       </div><!-- /animate-from-right -->
     </div><!-- /product-layout -->
 
-    <!-- Tabs -->
-    <div class="product-tabs">
-      <div class="product-tabs__nav">
-        <button class="product-tab-btn is-active" data-tab="specs">Specifications</button>
-        <button class="product-tab-btn" data-tab="features">Features</button>
-        <button class="product-tab-btn" data-tab="shipping">Shipping &amp; Returns</button>
-      </div>
-
-      <div class="product-tab-panel is-active" data-tab="specs">
-        {%- assign has_specs = false -%}
-        {%- if motor or battery_spec or range_spec or speed_spec or weight_spec or frame_spec -%}
-          {%- assign has_specs = true -%}
-        {%- endif -%}
-        {%- if has_specs -%}
-          <div class="specs-grid">
-            {%- if motor        != blank -%}<div class="spec-row"><span class="spec-row__key">Motor</span><span class="spec-row__value">{{ motor }}</span></div>{%- endif -%}
-            {%- if battery_spec != blank -%}<div class="spec-row"><span class="spec-row__key">Battery</span><span class="spec-row__value">{{ battery_spec }}</span></div>{%- endif -%}
-            {%- if range_spec   != blank -%}<div class="spec-row"><span class="spec-row__key">Range</span><span class="spec-row__value">{{ range_spec }}</span></div>{%- endif -%}
-            {%- if speed_spec   != blank -%}<div class="spec-row"><span class="spec-row__key">Speed</span><span class="spec-row__value">{{ speed_spec }}</span></div>{%- endif -%}
-            {%- if weight_spec  != blank -%}<div class="spec-row"><span class="spec-row__key">Weight</span><span class="spec-row__value">{{ weight_spec }}</span></div>{%- endif -%}
-            {%- if frame_spec   != blank -%}<div class="spec-row"><span class="spec-row__key">Frame</span><span class="spec-row__value">{{ frame_spec }}</span></div>{%- endif -%}
-          </div>
-        {%- else -%}
-          <p style="color:#6b7280;">No specifications available.</p>
-        {%- endif -%}
-      </div>
-
-      <div class="product-tab-panel" data-tab="features">
-        {%- if features != blank -%}
-          <ul class="features-tab-list">
-            {%- for feature in features -%}
-              <li class="features-tab-item">
-                <svg class="product-features__check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                <span style="color:#374151;font-size:0.9rem;">{{ feature }}</span>
-              </li>
-            {%- endfor -%}
-          </ul>
-        {%- else -%}
-          <p style="color:#6b7280;">No features listed.</p>
-        {%- endif -%}
-      </div>
-
-      <div class="product-tab-panel" data-tab="shipping">
-        <div class="shipping-content">
-          <h3>Free EU Shipping</h3>
-          <p>All orders ship free to EU destinations. Dispatched within 1–3 business days, delivered in 5–10 business days.</p>
-          <h3>14-Day Returns</h3>
-          <p>You have 14 days from delivery to return your order for any reason. Product must be unused and in original packaging.</p>
-          <h3>2-Year Warranty</h3>
-          <p>Full manufacturer warranty on frame and electrical components. Battery cells covered for 1 year.</p>
-        </div>
-      </div>
-    </div>
-
     <!-- ── Product Description (below tabs) ── -->
     {%- if product.description != blank or features != blank -%}
       <div class="pdp-description-section">
