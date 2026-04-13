@@ -1,1 +1,132 @@
-
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero-slider": {
+      "type": "hero-slider",
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "asset_image": "hero-1.webp",
+            "subtitle": "Smart Commuting Solutions",
+            "title": "Urban Mobility",
+            "description": "Ride smarter, ride further — engineered for the city.",
+            "cta_label": "Shop Now",
+            "mobile_subtitle": "Smart Commuting",
+            "mobile_description": "Engineered for city rides."
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "asset_image": "hero-2.webp",
+            "subtitle": "Next Generation Electric Bikes",
+            "title": "Explore the Future",
+            "description": "Experience unmatched performance and style.",
+            "cta_label": "Discover More",
+            "mobile_subtitle": "Next-Gen E-Bikes",
+            "mobile_description": "Performance & style."
+          }
+        }
+      },
+      "block_order": ["slide-1", "slide-2"],
+      "settings": {}
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured Models",
+        "subtitle": "Discover our most popular electric bikes, designed for every adventure.",
+        "products_limit": 3
+      }
+    },
+    "features": {
+      "type": "features",
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": {
+            "icon": "battery",
+            "title": "Long Battery Life",
+            "description": "Up to 110km range on a single charge with our advanced battery technology."
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "icon": "zap",
+            "title": "Powerful Motors",
+            "description": "High-performance motors delivering up to 1000W for any terrain."
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "title": "2-Year Warranty",
+            "description": "Comprehensive warranty coverage for peace of mind."
+          }
+        },
+        "feature-4": {
+          "type": "feature",
+          "settings": {
+            "icon": "wrench",
+            "title": "Easy Maintenance",
+            "description": "Simple, user-friendly design with readily available parts."
+          }
+        }
+      },
+      "block_order": ["feature-1", "feature-2", "feature-3", "feature-4"],
+      "settings": {
+        "title": "Why Choose Our E-Bikes",
+        "subtitle": "We combine cutting-edge technology with sustainable design to deliver the best electric biking experience."
+      }
+    },
+    "about": {
+      "type": "about",
+      "blocks": {
+        "stat-1": {
+          "type": "stat",
+          "settings": { "number": "50K+", "label": "Happy Riders" }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": { "number": "15+", "label": "E-Bike Models" }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": { "number": "98%", "label": "Satisfaction" }
+        }
+      },
+      "block_order": ["stat-1", "stat-2", "stat-3"],
+      "settings": {
+        "title": "Revolutionizing Urban Mobility",
+        "text_1": "We're committed to creating high-quality electric bikes that combine performance, sustainability, and style. Our mission is to make eco-friendly transportation accessible to everyone.",
+        "text_2": "With years of expertise in electric vehicle technology, we design and manufacture e-bikes that exceed industry standards, ensuring reliability, comfort, and an exceptional riding experience.",
+        "image_url": "https://images.unsplash.com/photo-1758764032776-08f6930a9146?fit=max&w=800&q=80"
+      }
+    },
+    "contact-form": {
+      "type": "contact-form",
+      "settings": {
+        "title": "Get In Touch",
+        "subtitle": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible."
+      }
+    }
+  },
+  "order": [
+    "hero-slider",
+    "featured-collection",
+    "features",
+    "about",
+    "contact-form"
+  ]
+}

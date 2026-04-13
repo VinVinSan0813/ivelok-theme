@@ -62,7 +62,22 @@
             fetchpriority="high"
             style="width:100%;height:auto;display:block;border-radius:12px;object-fit:contain;background:#f7f7f7;"
           >
+          {%- if product.images.size > 1 -%}
+            <button class="gallery-arrow gallery-arrow--prev" id="gallery-prev" type="button" aria-label="Previous image">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button class="gallery-arrow gallery-arrow--next" id="gallery-next" type="button" aria-label="Next image">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          {%- endif -%}
         </div>
+        {%- if product.images.size > 1 and product.images.size <= 8 -%}
+          <div class="gallery-dots" id="gallery-dots">
+            {%- for image in product.images -%}
+              <button class="gallery-dot{% if forloop.first %} active{% endif %}" type="button" data-index="{{ forloop.index0 }}" aria-label="Image {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
 
         {%- if product.images.size > 1 -%}
           <div class="pdp-thumbs" id="pdp-thumbs">
@@ -133,7 +148,7 @@
                     class="pdp-swatch{% if val == color_opt.selected_value %} is-active{% endif %}"
                     data-opt-name="{{ color_opt.name }}"
                     data-opt-val="{{ val }}"
-                    style="background-color:{% case sw %}{% when 'green' %}#4a7c59{% when 'forestgreen' %}#3a6b47{% when 'white' %}#f5f5f0{% when 'black','onyxblack' %}#1c1c1e{% when 'grey','gray' %}#9ca3af{% when 'red' %}#dc2626{% when 'blue' %}#2563eb{% when 'gemblue' %}#29d9c2{% when 'navy' %}#1e3a5f{% when 'silver' %}#c0c0c0{% when 'orange' %}#EE731B{% when 'yellow','bumblebeeyellow' %}#eab308{% when 'purple' %}#7c3aed{% when 'brown' %}#92400e{% when 'pink' %}#ec4899{% when 'beige' %}#f5f0e8{% else %}#888{% endcase %};"
+                    style="background-color:{% case sw %}{% when 'green' %}#4a7c59{% when 'forestgreen','mountaingreen' %}#3a6b47{% when 'white' %}#f5f5f0{% when 'black','onyxblack','spaceblack' %}#1c1c1e{% when 'grey','gray' %}#9ca3af{% when 'red' %}#dc2626{% when 'blue' %}#2563eb{% when 'gemblue' %}#29d9c2{% when 'navy','midnightblue' %}#1e3a5f{% when 'silver' %}#c0c0c0{% when 'orange' %}#EE731B{% when 'yellow','bumblebeeyellow' %}#eab308{% when 'purple' %}#7c3aed{% when 'brown' %}#92400e{% when 'pink' %}#ec4899{% when 'beige' %}#f5f0e8{% else %}#888{% endcase %};"
                     aria-label="{{ val }}"
                     aria-pressed="{% if val == color_opt.selected_value %}true{% else %}false{% endif %}"
                     title="{{ val }}"
@@ -287,9 +302,14 @@
 
   /* Build image-id → CDN URL map from thumbnail buttons */
   var IMG_ID_URL_MAP = {};
+  var GALLERY_URLS = [];
+  var GALLERY_IDS  = [];
   document.querySelectorAll('#pdp-thumbs .pdp-thumb').forEach(function (btn) {
     IMG_ID_URL_MAP[btn.dataset.imgId] = btn.dataset.full;
+    GALLERY_URLS.push(btn.dataset.full);
+    GALLERY_IDS.push(btn.dataset.imgId);
   });
+  var currentGalleryIndex = 0;
 
   /* Track selected options */
   var selectedOpts = {};
@@ -303,10 +323,43 @@
     thumbsContainer.addEventListener('click', function (e) {
       var btn = e.target.closest('.pdp-thumb');
       if (!btn) return;
-      setMainImg(btn.dataset.full);
-      setActiveThumb(btn.dataset.imgId);
+      var idx = GALLERY_URLS.indexOf(btn.dataset.full);
+      showImage(idx >= 0 ? idx : 0);
     });
   }
+
+  /* ── Arrow buttons ── */
+  var prevBtn = document.getElementById('gallery-prev');
+  var nextBtn = document.getElementById('gallery-next');
+  if (prevBtn) prevBtn.addEventListener('click', function () { showImage(currentGalleryIndex - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { showImage(currentGalleryIndex + 1); });
+
+  /* ── Dots click ── */
+  var dotsContainer = document.getElementById('gallery-dots');
+  if (dotsContainer) {
+    dotsContainer.addEventListener('click', function (e) {
+      var dot = e.target.closest('.gallery-dot');
+      if (!dot) return;
+      showImage(parseInt(dot.dataset.index, 10));
+    });
+  }
+
+  /* ── Touch swipe ── */
+  (function () {
+    var wrapper = document.querySelector('.product-image-wrapper');
+    if (!wrapper) return;
+    var startX = 0, startY = 0;
+    wrapper.addEventListener('touchstart', function (e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    wrapper.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - startX;
+      var dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+      showImage(currentGalleryIndex + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+  })();
 
   /* ── Qty buttons ── */
   document.querySelector('.quantity-btn--decrease') &&
@@ -363,11 +416,9 @@
     if (isColor) {
       var imgUrl = VARIANT_IMG_MAP[match.id];
       if (imgUrl) {
-        setMainImg(imgUrl);
-        /* Highlight matching thumbnail */
-        if (match.featured_image) {
-          setActiveThumb(String(match.featured_image.id));
-        }
+        preloadImage(imgUrl);
+        var idx = GALLERY_URLS.indexOf(imgUrl);
+        showImage(idx >= 0 ? idx : 0);
       }
     }
   });
@@ -395,6 +446,36 @@
       if (active) th.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
     });
   }
+
+  function showImage(index) {
+    if (!GALLERY_URLS.length) return;
+    index = Math.max(0, Math.min(index, GALLERY_URLS.length - 1));
+    currentGalleryIndex = index;
+    setMainImg(GALLERY_URLS[index]);
+    if (GALLERY_IDS[index]) setActiveThumb(GALLERY_IDS[index]);
+    /* Update dots */
+    document.querySelectorAll('.gallery-dot').forEach(function (dot, i) {
+      dot.classList.toggle('active', i === index);
+    });
+    /* Update arrow disabled state */
+    var prev = document.getElementById('gallery-prev');
+    var next = document.getElementById('gallery-next');
+    if (prev) prev.disabled = index === 0;
+    if (next) next.disabled = index === GALLERY_URLS.length - 1;
+  }
+
+  function preloadImage(url) {
+    if (!url) return;
+    if (document.querySelector('link[rel="preload"][href="' + url + '"]')) return;
+    var link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = url;
+    document.head.appendChild(link);
+  }
+
+  /* Init arrow states */
+  showImage(0);
 
   function updatePrice(variant) {
     var priceEl   = document.getElementById('pdp-price');
@@ -426,10 +507,12 @@
 
   function formatMoney(cents) {
     var amount = (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return MONEY_FORMAT.replace('{{amount}}', amount)
-      .replace('{{amount_with_comma_separator}}', amount)
-      .replace('{{amount_no_decimals}}', Math.round(cents / 100))
-      .replace('{{amount_no_decimals_with_comma_separator}}', Math.round(cents / 100));
+    var noDecimals = String(Math.round(cents / 100));
+    return MONEY_FORMAT
+      .replace(/\{\{amount_no_decimals_with_comma_separator\}\}/g, noDecimals)
+      .replace(/\{\{amount_no_decimals\}\}/g, noDecimals)
+      .replace(/\{\{amount_with_comma_separator\}\}/g, amount)
+      .replace(/\{\{amount\}\}/g, amount);
   }
 }());
 </script>

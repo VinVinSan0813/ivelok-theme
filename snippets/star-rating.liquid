@@ -1,1 +1,41 @@
+{%- comment -%}
+  Star Rating Snippet
+  Usage: {% render 'star-rating', rating: product.metafields.custom.rating.value, review_count: product.metafields.custom.review_count.value %}
+{%- endcomment -%}
 
+{%- liquid
+  assign rating_float = rating | times: 1.0
+  assign full_stars = rating_float | floor
+  assign half_star = false
+  assign remainder = rating_float | minus: full_stars
+  if remainder >= 0.5
+    assign half_star = true
+  endif
+  assign empty_stars = 5 | minus: full_stars
+  if half_star
+    assign empty_stars = empty_stars | minus: 1
+  endif
+-%}
+
+<div class="star-rating" aria-label="Rating: {{ rating }} out of 5">
+  <div class="star-rating__stars">
+    {%- for i in (1..full_stars) -%}
+      <svg class="star-rating__star star-rating__star--filled" viewBox="0 0 24 24" aria-hidden="true">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    {%- endfor -%}
+    {%- if half_star -%}
+      <svg class="star-rating__star star-rating__star--filled" viewBox="0 0 24 24" aria-hidden="true" style="opacity:0.6">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    {%- endif -%}
+    {%- for i in (1..empty_stars) -%}
+      <svg class="star-rating__star star-rating__star--empty" viewBox="0 0 24 24" aria-hidden="true">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    {%- endfor -%}
+  </div>
+  {%- if review_count and review_count > 0 -%}
+    <span class="star-rating__count">{{ rating }} ({{ review_count }})</span>
+  {%- endif -%}
+</div>

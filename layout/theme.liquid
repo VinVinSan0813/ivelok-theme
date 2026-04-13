@@ -1,1 +1,109 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ page_description | default: shop.description | truncate: 160 | escape }}">
+  <meta name="theme-color" content="#EE731B">
 
+  <link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
+
+  <title>
+    {%- if request.page_type == 'index' -%}
+      {{ shop.name }} — {{ shop.description | default: 'Premium Electric Bikes' }}
+    {%- else -%}
+      {{ page_title }} | {{ shop.name }}
+    {%- endif -%}
+  </title>
+
+  {%- comment -%} Open Graph & Twitter Card {%- endcomment -%}
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:type" content="{%- if request.page_type == 'product' -%}product{%- else -%}website{%- endif -%}">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  <meta property="og:description" content="{{ page_description | escape | default: shop.description }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- if request.page_type == 'product' -%}
+    <meta property="og:image" content="{{ product.featured_image | image_url: width: 1200 }}">
+    <meta property="product:price:amount" content="{{ product.price | money_without_currency }}">
+    <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+  {%- elsif shop.brand.cover_image -%}
+    <meta property="og:image" content="{{ shop.brand.cover_image | image_url: width: 1200 }}">
+  {%- endif -%}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | escape }}">
+  <meta name="twitter:description" content="{{ page_description | escape | default: shop.description }}">
+
+  {%- comment -%} Preconnect: gstatic (font files) + cdn.shopify (images) — high-value only {%- endcomment -%}
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.shopify.com">
+
+  {%- comment -%} Preload first hero image — imagesrcset mirrors <img> srcset so browser picks same candidate {%- endcomment -%}
+  <link rel="preload" as="image" fetchpriority="high"
+    imagesrcset="{{ 'hero-1-800.webp' | asset_url }} 800w, {{ 'hero-1-1200.webp' | asset_url }} 1200w, {{ 'hero-1.webp' | asset_url }} 1920w"
+    imagesizes="100vw">
+
+  {%- comment -%} Preload first product image on home page — reduces LCP resource load delay {%- endcomment -%}
+  {%- if request.page_type == 'index' -%}
+    {%- assign first_product = collections.all.products.first -%}
+    {%- if first_product.featured_image != blank -%}
+      <link rel="preload" as="image" fetchpriority="high"
+        href="{{ first_product.featured_image | image_url: width: 600 }}"
+        imagesrcset="{{ first_product.featured_image | image_url: width: 400 }} 400w, {{ first_product.featured_image | image_url: width: 600 }} 600w"
+        imagesizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw">
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} Critical CSS — prevents FOUC and CLS when theme.css loads async {%- endcomment -%}
+  <style>
+    :root {
+      --font-size: 16px;
+      --background: #ffffff;
+      --foreground: #2a2b2a;
+      --primary: #EE731B;
+      --brand: #EE731B;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: var(--font-size); }
+    body {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+      line-height: 1.5;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    /* Header height reservation — prevents content jump */
+    .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 4rem; background: rgba(255,255,255,0.95); }
+    /* Hero placeholder — prevents height collapse before theme.css loads */
+    .hero-slider { position: relative; height: clamp(320px, 45vw, 780px); width: 100%; overflow: hidden; background: #1a1a1a; }
+    .hero-slider__track { position: relative; width: 100%; height: 100%; }
+    .hero-slider__image { position: absolute; inset: 0; }
+    .hero-slider__image img { width: 100%; height: 100%; object-fit: cover; }
+    /* Keep animated elements invisible until theme.css loads — prevents layout shift */
+    .animate-on-scroll, .animate-from-left, .animate-from-right { opacity: 0; }
+  </style>
+
+  {%- comment -%} Google Fonts — Montserrat (non-blocking, display=optional prevents font-swap CLS) {%- endcomment -%}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=optional" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=optional"></noscript>
+
+  {{ content_for_header }}
+
+  {%- comment -%} theme.css — async, non-render-blocking {%- endcomment -%}
+  <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ 'theme.css' | asset_url }}"></noscript>
+</head>
+
+<body>
+  {% section 'header' %}
+
+  <main id="main-content">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  <div class="cart-notification" aria-live="polite"></div>
+
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+</body>
+</html>

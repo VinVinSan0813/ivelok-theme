@@ -1,1 +1,150 @@
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign current_tags = current_tags
+-%}
 
+{%- comment -%} Page Header {%- endcomment -%}
+<div class="collection-header">
+  <div class="container">
+    <div class="animate-on-scroll">
+      <h1>{{ collection.title | default: 'Our E-Bikes Collection' }}</h1>
+      {%- if collection.description != blank -%}
+        <p>{{ collection.description }}</p>
+      {%- else -%}
+        <p>Browse our complete range of electric bikes designed for every lifestyle and terrain.</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<div class="collection-layout">
+  <div class="container">
+    <div class="collection-layout__inner">
+
+      {%- comment -%} Sidebar Filters {%- endcomment -%}
+      <aside class="collection-sidebar">
+        <div class="collection-sidebar__inner">
+          <div class="collection-sidebar__header">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="21" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="3" y2="4"/>
+              <line x1="21" y1="12" x2="12" y2="12"/><line x1="8" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="20" x2="16" y2="20"/><line x1="12" y1="20" x2="3" y2="20"/>
+              <line x1="14" y1="2" x2="14" y2="6"/><line x1="8" y1="10" x2="8" y2="14"/>
+              <line x1="16" y1="18" x2="16" y2="22"/>
+            </svg>
+            <h3>Filters</h3>
+          </div>
+
+          {%- comment -%} Category Tags Filter {%- endcomment -%}
+          <div class="collection-sidebar__section">
+            <h4>Categories</h4>
+            <div>
+              {%- liquid
+                assign all_url = collection.url
+                assign is_all_active = true
+                if current_tags.size > 0
+                  assign is_all_active = false
+                endif
+              -%}
+              <a
+                href="{{ all_url }}"
+                class="filter-option {% if is_all_active %}is-active{% endif %}"
+              >
+                <span class="filter-option__inner">
+                  <span>All Bikes</span>
+                  <span class="filter-option__count">({{ collection.all_products_count }})</span>
+                </span>
+              </a>
+
+              {%- for tag in collection.all_tags -%}
+                {%- liquid
+                  assign tag_lower = tag | downcase
+                  assign is_category = false
+                  assign category_tags = 'mountain,urban,folding,cargo' | split: ','
+                  for cat in category_tags
+                    if tag_lower == cat
+                      assign is_category = true
+                    endif
+                  endfor
+                -%}
+                {%- if is_category -%}
+                  {%- liquid
+                    assign is_tag_active = false
+                    if current_tags contains tag
+                      assign is_tag_active = true
+                    endif
+                  -%}
+                  <a
+                    href="{{ collection.url }}/{{ tag | handle }}"
+                    class="filter-option {% if is_tag_active %}is-active{% endif %}"
+                  >
+                    <span class="filter-option__inner">
+                      <span>{{ tag }}</span>
+                    </span>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+          {%- comment -%} Sort By {%- endcomment -%}
+          <div class="collection-sidebar__section">
+            <h4>Sort By</h4>
+            <select class="sort-select js-sort-select" name="sort_by" aria-label="Sort products">
+              <option value="manual" {% if sort_by == 'manual' %}selected{% endif %}>Featured</option>
+              <option value="price-ascending" {% if sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price-descending" {% if sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
+              <option value="best-selling" {% if sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
+              <option value="created-descending" {% if sort_by == 'created-descending' %}selected{% endif %}>Newest</option>
+            </select>
+          </div>
+        </div>
+      </aside>
+
+      {%- comment -%} Products Grid {%- endcomment -%}
+      <div class="collection-main">
+        <p class="collection-count">
+          Showing {{ collection.products_count }}
+          {%- if collection.products_count == 1 -%} product{%- else -%} products{%- endif -%}
+        </p>
+
+        {%- if collection.products.size > 0 -%}
+          <div class="collection-grid">
+            {%- for product in collection.products -%}
+              {%- render 'product-card', product: product, index: forloop.index0 -%}
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Pagination {%- endcomment -%}
+          {%- if paginate.pages > 1 -%}
+            <div class="pagination" style="margin-top:3rem;display:flex;justify-content:center;gap:0.5rem;">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" style="padding:0.5rem 1rem;border:1px solid #e5e7eb;border-radius:0.5rem;text-decoration:none;font-size:0.875rem;">{{ part.title }}</a>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <span style="padding:0.5rem 1rem;border-radius:0.5rem;background:#000;color:#fff;font-size:0.875rem;">{{ part.title }}</span>
+                  {%- else -%}
+                    <span style="padding:0.5rem 1rem;font-size:0.875rem;">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+        {%- else -%}
+          <div class="collection-empty">
+            <p>No products found in this category.</p>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": []
+}
+{% endschema %}

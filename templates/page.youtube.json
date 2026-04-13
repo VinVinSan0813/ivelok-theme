@@ -1,0 +1,59 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "channel-landing": {
+      "type": "channel-landing",
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": {
+            "icon": "🔋",
+            "title": "120km Range",
+            "description": "Advanced battery system. One charge takes you across the city and back."
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "icon": "⚡",
+            "title": "75Nm Torque",
+            "description": "Powerful motor handles any hill — no more arriving sweaty."
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "icon": "📦",
+            "title": "Folds in Seconds",
+            "description": "Take it on the subway, store it under your desk. Life-changing convenience."
+          }
+        },
+        "feature-4": {
+          "type": "feature",
+          "settings": {
+            "icon": "🛡️",
+            "title": "2-Year Warranty",
+            "description": "Full coverage, real support. We stand behind every bike we build."
+          }
+        }
+      },
+      "block_order": ["feature-1", "feature-2", "feature-3", "feature-4"],
+      "settings": {
+        "channel": "youtube",
+        "product_handle": "engwe-ep-2-3-0-boost-foldable-fat-tire-e-bike-120km-range-75nm-torque",
+        "discount_code": "YT10",
+        "headline": "The EP 2.3.0 — Your Perfect Urban E-Bike",
+        "subheading": "Foldable design, 120km range, and 75Nm torque. Built for the city, ready for anywhere."
+      }
+    }
+  },
+  "order": ["channel-landing"]
+}

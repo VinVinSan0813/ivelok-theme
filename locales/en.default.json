@@ -1,1 +1,74 @@
-
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "search": "Search",
+    "cart": "Cart",
+    "account": "Account",
+    "close": "Close",
+    "loading": "Loading..."
+  },
+  "products": {
+    "add_to_cart": "Add to Cart",
+    "sold_out": "Sold Out",
+    "unavailable": "Unavailable",
+    "on_sale": "SALE",
+    "in_stock": "In Stock",
+    "out_of_stock": "Out of Stock",
+    "quantity": "Quantity",
+    "key_features": "Key Features",
+    "specifications": "Specifications",
+    "features": "Features",
+    "shipping_returns": "Shipping & Returns"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty.",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "continue_shopping": "Continue Shopping",
+    "remove": "Remove",
+    "added": "Added to cart!"
+  },
+  "collections": {
+    "all_products": "All Bikes",
+    "filter_by": "Filters",
+    "sort_by": "Sort By",
+    "showing_products": "Showing {{ count }} products",
+    "no_products": "No products found in this category.",
+    "featured": "Featured",
+    "price_low": "Price: Low to High",
+    "price_high": "Price: High to Low",
+    "best_selling": "Best Selling",
+    "newest": "Newest"
+  },
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "features": "Features",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "footer": {
+    "quick_links": "Quick Links",
+    "customer_service": "Customer Service",
+    "contact_us": "Contact Us",
+    "shipping": "Shipping & Delivery",
+    "returns": "Returns & Exchanges",
+    "warranty": "Warranty Info",
+    "faqs": "FAQs",
+    "support": "Support Center",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy"
+  }
+}

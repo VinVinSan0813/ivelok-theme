@@ -1,0 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "channel-landing": {
+      "type": "channel-landing",
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": {
+            "icon": "🏔️",
+            "title": "Up to 150km",
+            "description": "Dual battery option. Ride all day, every day — zero range anxiety."
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "icon": "🛡️",
+            "title": "Dual Suspension",
+            "description": "Front & rear shock absorption. Butter-smooth on any terrain."
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "icon": "🔥",
+            "title": "Fat Tire Grip",
+            "description": "4\" fat tires handle gravel, dirt, rain — whatever you throw at it."
+          }
+        }
+      },
+      "block_order": ["feature-1", "feature-2", "feature-3"],
+      "settings": {
+        "channel": "tiktok",
+        "product_handle": "engwe-m20-long-range-fat-tire-e-bike-dual-suspension-75-150km-range",
+        "discount_code": "TK10",
+        "headline": "The M20 hits different.",
+        "subheading": "150km range. Dual suspension. Fat tires. Built for riders who don't settle."
+      }
+    }
+  },
+  "order": ["channel-landing"]
+}

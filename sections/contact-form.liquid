@@ -1,1 +1,100 @@
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="section__header animate-on-scroll">
+      <h2>{{ section.settings.title | default: 'Get In Touch' }}</h2>
+      <p>{{ section.settings.subtitle | default: "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible." }}</p>
+    </div>
 
+    {%- form 'contact', class: 'contact-form animate-on-scroll animate-delay-2' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="contact-form__success" style="color:#16a34a;font-weight:600;text-align:center;padding:1rem 0;">
+          Thank you for your message! We'll be in touch shortly.
+        </p>
+      {%- endif -%}
+
+      {%- if form.errors -%}
+        <p class="contact-form__error" style="color:#dc2626;font-weight:600;text-align:center;padding:1rem 0;">
+          {{ form.errors | default_errors }}
+        </p>
+      {%- endif -%}
+
+      <div class="contact-form__row">
+        <div class="form-group">
+          <label for="ContactFormName">Name</label>
+          <input
+            type="text"
+            id="ContactFormName"
+            name="contact[name]"
+            value="{{ form.name }}"
+            autocomplete="name"
+            placeholder="Your name"
+          >
+        </div>
+        <div class="form-group">
+          <label for="ContactFormEmail">Email</label>
+          <input
+            type="email"
+            id="ContactFormEmail"
+            name="contact[email]"
+            value="{{ form.email }}"
+            autocomplete="email"
+            autocapitalize="off"
+            autocorrect="off"
+            placeholder="your@email.com"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="ContactFormSubject">Subject</label>
+        <input
+          type="text"
+          id="ContactFormSubject"
+          name="contact[subject]"
+          placeholder="How can we help?"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="ContactFormMessage">Message</label>
+        <textarea
+          id="ContactFormMessage"
+          name="contact[body]"
+          rows="6"
+          placeholder="Your message..."
+          required
+        >{{ form.body }}</textarea>
+      </div>
+
+      <button type="submit" class="contact-form__submit">
+        Send Message
+      </button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Get In Touch"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Have questions? We'd love to hear from you."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Form"
+    }
+  ]
+}
+{% endschema %}

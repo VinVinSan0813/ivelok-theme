@@ -2254,3 +2254,58 @@ h4 {
   max-width: 100%;
   height: auto;
 }
+
+/* ── Gallery Arrows ── */
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: background 0.15s, opacity 0.15s;
+}
+.gallery-arrow:hover {
+  background: #fff;
+}
+.gallery-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.gallery-arrow--prev { left: 10px; }
+.gallery-arrow--next { right: 10px; }
+
+@media (max-width: 767px) {
+  .gallery-arrow { display: none; }
+}
+
+/* ── Gallery Dots ── */
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+.gallery-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: #d1d5db;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s, transform 0.15s;
+}
+.gallery-dot.active {
+  background: #111;
+  transform: scale(1.25);
+}

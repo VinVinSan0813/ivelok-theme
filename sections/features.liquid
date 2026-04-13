@@ -1,1 +1,147 @@
+<section id="features" class="features-section">
+  <div class="container">
+    <div class="section__header animate-on-scroll">
+      <h2>{{ section.settings.title | default: 'Why Choose Our E-Bikes' }}</h2>
+      <p>{{ section.settings.subtitle | default: 'We combine cutting-edge technology with sustainable design to deliver the best electric biking experience.' }}</p>
+    </div>
 
+    <div class="features-grid">
+      {%- for block in section.blocks -%}
+        <div class="feature-card animate-on-scroll animate-delay-{{ forloop.index }}" {{ block.shopify_attributes }}>
+          <div class="feature-card__icon">
+            {%- case block.settings.icon -%}
+              {%- when 'battery' -%}
+                <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="2" y="7" width="16" height="10" rx="2" ry="2"/>
+                  <line x1="22" y1="11" x2="22" y2="13"/>
+                </svg>
+              {%- when 'zap' -%}
+                <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              {%- when 'shield' -%}
+                <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              {%- when 'wrench' -%}
+                <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+              {%- when 'truck' -%}
+                <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="1" y="3" width="15" height="13"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+              {%- when 'star' -%}
+                <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+              {%- else -%}
+                <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+            {%- endcase -%}
+          </div>
+          <h3 class="feature-card__title">{{ block.settings.title }}</h3>
+          <p class="feature-card__desc">{{ block.settings.description }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Features",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Why Choose Our E-Bikes"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "We combine cutting-edge technology with sustainable design to deliver the best electric biking experience."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "battery", "label": "Battery" },
+            { "value": "zap", "label": "Zap / Lightning" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "wrench", "label": "Wrench" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "star", "label": "Star" }
+          ],
+          "default": "battery"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Feature description goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "battery",
+            "title": "Long Battery Life",
+            "description": "Up to 110km range on a single charge with our advanced battery technology."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "zap",
+            "title": "Powerful Motors",
+            "description": "High-performance motors delivering up to 1000W for any terrain."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "title": "2-Year Warranty",
+            "description": "Comprehensive warranty coverage for peace of mind."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "wrench",
+            "title": "Easy Maintenance",
+            "description": "Simple, user-friendly design with readily available parts."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

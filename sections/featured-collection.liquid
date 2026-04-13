@@ -1,1 +1,77 @@
+{%- liquid
+  assign featured_collection = collections[section.settings.collection]
+  if featured_collection == blank
+    assign featured_collection = collections.all
+  endif
+  assign products_limit = section.settings.products_limit | default: 3
+-%}
 
+<section class="featured-collection section">
+  <div class="container">
+    <div class="section__header animate-on-scroll">
+      <h2>{{ section.settings.title | default: 'Featured Models' }}</h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p>{{ section.settings.subtitle }}</p>
+      {%- else -%}
+        <p>Discover our most popular electric bikes, designed for every adventure.</p>
+      {%- endif -%}
+    </div>
+
+    <div class="product-grid">
+      {%- for product in featured_collection.products limit: products_limit -%}
+        {%- render 'product-card', product: product, index: forloop.index0 -%}
+      {%- else -%}
+        <p>No products found.</p>
+      {%- endfor -%}
+    </div>
+
+    <div class="featured-collection__cta">
+      <a href="{{ routes.collections_url }}/all" class="btn btn--primary">
+        View All Products
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14"/>
+          <path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Featured Models"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "Discover our most popular electric bikes, designed for every adventure."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Number of Products",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection"
+    }
+  ]
+}
+{% endschema %}

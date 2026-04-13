@@ -1,1 +1,137 @@
+{%- comment -%}
+  Product Card Snippet
+  Usage: {% render 'product-card', product: product, index: forloop.index0 %}
+{%- endcomment -%}
 
+{%- liquid
+  assign badge = product.metafields.custom.badge.value
+  assign rating = product.metafields.custom.rating.value | default: 0 | times: 1
+  assign review_count = product.metafields.custom.review_count.value | default: 0
+  assign features = product.metafields.custom.features.value
+  assign is_on_sale = false
+  if product.compare_at_price > product.price
+    assign is_on_sale = true
+  endif
+  assign card_delay = index | default: 0 | modulo: 4 | plus: 1
+-%}
+
+<div class="product-card animate-on-scroll animate-delay-{{ card_delay }}">
+
+  {%- if badge != blank -%}
+    <span class="product-card__badge">{{ badge }}</span>
+  {%- endif -%}
+
+  <button
+    class="product-card__wishlist"
+    aria-label="Add {{ product.title | escape }} to wishlist"
+    data-product-id="{{ product.id }}"
+  >
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+  </button>
+
+  <a href="{{ product.url }}" class="product-card__image-link" aria-label="{{ product.title | escape }}">
+    <div class="product-card__image-wrapper">
+      {%- liquid
+        assign img_loading = 'lazy'
+        assign img_fetchpriority = 'auto'
+        if index == 0
+          assign img_loading = 'eager'
+          assign img_fetchpriority = 'high'
+        endif
+      -%}
+      {%- if product.featured_image != blank -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 600 }} 600w"
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
+          alt="{{ product.featured_image.alt | escape | default: product.title }}"
+          width="600"
+          height="600"
+          loading="{{ img_loading }}"
+          fetchpriority="{{ img_fetchpriority }}"
+          style="width:100%;height:100%;object-fit:cover;"
+        >
+      {%- else -%}
+        <img
+          src="{{ product.metafields.custom.image_url.value | default: 'https://images.unsplash.com/photo-1668106601849-e21e72c2c563?fit=max&w=600&q=80' }}"
+          alt="{{ product.title | escape }}"
+          width="600"
+          height="600"
+          loading="{{ img_loading }}"
+          fetchpriority="{{ img_fetchpriority }}"
+          style="width:100%;height:100%;object-fit:cover;"
+        >
+      {%- endif -%}
+      {%- if is_on_sale -%}
+        <span class="product-card__sale-badge">SALE</span>
+      {%- endif -%}
+    </div>
+  </a>
+
+  <div class="product-card__body">
+    <div class="product-card__meta">
+      {%- if product.type != blank -%}
+        <span class="product-card__category">{{ product.type }}</span>
+      {%- elsif product.tags.size > 0 -%}
+        <span class="product-card__category">{{ product.tags.first }}</span>
+      {%- endif -%}
+      {%- if product.available -%}
+        <span class="product-card__stock product-card__stock--in">In Stock</span>
+      {%- else -%}
+        <span class="product-card__stock product-card__stock--out">Out of Stock</span>
+      {%- endif -%}
+    </div>
+
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    {%- if rating > 0 -%}
+      {%- render 'star-rating', rating: rating, review_count: review_count -%}
+    {%- endif -%}
+
+    <div class="product-card__price">
+      <span class="product-card__price-current">{{ product.price | money }}</span>
+      {%- if is_on_sale -%}
+        <span class="product-card__price-original">{{ product.compare_at_price | money }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- if features != blank -%}
+      <div class="product-card__features">
+        {%- for feature in features limit: 2 -%}
+          <span class="product-card__feature-tag">{{ feature }}</span>
+        {%- endfor -%}
+      </div>
+    {%- elsif product.tags.size > 0 -%}
+      <div class="product-card__features">
+        {%- for tag in product.tags limit: 2 -%}
+          {%- unless tag contains ':' -%}
+            <span class="product-card__feature-tag">{{ tag }}</span>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="product-card__footer">
+    {%- if product.available -%}
+      <button
+        class="btn-add-to-cart js-add-to-cart"
+        data-variant-id="{{ product.first_available_variant.id }}"
+        aria-label="Add {{ product.title | escape }} to cart"
+      >
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        Add to Cart
+      </button>
+    {%- else -%}
+      <button class="btn-add-to-cart" disabled>Sold Out</button>
+    {%- endif -%}
+  </div>
+</div>

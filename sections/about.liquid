@@ -1,1 +1,115 @@
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="about-section__grid">
+      <div class="about-section__text animate-from-left">
+        <h2>{{ section.settings.title | default: 'Revolutionizing Urban Mobility' }}</h2>
+        {%- if section.settings.text_1 != blank -%}
+          <p>{{ section.settings.text_1 }}</p>
+        {%- else -%}
+          <p>We're committed to creating high-quality electric bikes that combine performance, sustainability, and style. Our mission is to make eco-friendly transportation accessible to everyone.</p>
+        {%- endif -%}
+        {%- if section.settings.text_2 != blank -%}
+          <p>{{ section.settings.text_2 }}</p>
+        {%- else -%}
+          <p>With years of expertise in electric vehicle technology, we design and manufacture e-bikes that exceed industry standards, ensuring reliability, comfort, and an exceptional riding experience.</p>
+        {%- endif -%}
+        <div class="about-section__stats">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'stat' -%}
+              <div class="stat" {{ block.shopify_attributes }}>
+                <div class="stat__number">{{ block.settings.number }}</div>
+                <div class="stat__label">{{ block.settings.label }}</div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
 
+      <div class="about-section__image animate-from-right">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 800 }}"
+            alt="{{ section.settings.image.alt | escape | default: 'About Us' }}"
+            width="800"
+            height="533"
+            loading="lazy"
+          >
+        {%- else -%}
+          <img
+            src="{{ section.settings.image_url | default: 'https://images.unsplash.com/photo-1758764032776-08f6930a9146?fit=max&w=800&q=80' }}"
+            alt="About Us"
+            width="800"
+            height="533"
+            loading="lazy"
+          >
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Revolutionizing Urban Mobility"
+    },
+    {
+      "type": "textarea",
+      "id": "text_1",
+      "label": "Paragraph 1",
+      "default": "We're committed to creating high-quality electric bikes that combine performance, sustainability, and style."
+    },
+    {
+      "type": "textarea",
+      "id": "text_2",
+      "label": "Paragraph 2",
+      "default": "With years of expertise in electric vehicle technology, we design and manufacture e-bikes that exceed industry standards."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_url",
+      "label": "Image URL (fallback)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Statistic",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "50K+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Happy Riders"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "50K+", "label": "Happy Riders" } },
+        { "type": "stat", "settings": { "number": "15+", "label": "E-Bike Models" } },
+        { "type": "stat", "settings": { "number": "98%", "label": "Satisfaction" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

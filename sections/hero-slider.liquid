@@ -1,1 +1,204 @@
+<div class="hero-slider" aria-label="Featured promotions">
+  <div class="hero-slider__track">
+    {%- for block in section.blocks -%}
+      <div class="hero-slider__slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+        <div class="hero-slider__image">
+          {%- if block.settings.asset_image != blank -%}
+            {%- assign asset_800 = block.settings.asset_image | replace: '.webp', '-800.webp' -%}
+            {%- assign asset_1200 = block.settings.asset_image | replace: '.webp', '-1200.webp' -%}
+            <img
+              src="{{ block.settings.asset_image | asset_url }}"
+              srcset="{{ asset_800 | asset_url }} 800w, {{ asset_1200 | asset_url }} 1200w, {{ block.settings.asset_image | asset_url }} 1920w"
+              sizes="100vw"
+              alt="{{ block.settings.title }}"
+              width="1920"
+              height="780"
+              loading="{%- if forloop.first -%}eager{%- else -%}lazy{%- endif -%}"
+              {% if forloop.first %}fetchpriority="high"{% endif %}
+            >
+          {%- elsif block.settings.image != blank -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 1200, format: 'webp', quality: 80 }}"
+              srcset="{{ block.settings.image | image_url: width: 400, format: 'webp', quality: 80 }} 400w,
+                      {{ block.settings.image | image_url: width: 800, format: 'webp', quality: 80 }} 800w,
+                      {{ block.settings.image | image_url: width: 1200, format: 'webp', quality: 80 }} 1200w,
+                      {{ block.settings.image | image_url: width: 1920, format: 'webp', quality: 80 }} 1920w"
+              sizes="100vw"
+              alt="{{ block.settings.image.alt | escape | default: block.settings.title }}"
+              width="1920"
+              height="780"
+              loading="{%- if forloop.first -%}eager{%- else -%}lazy{%- endif -%}"
+              {% if forloop.first %}fetchpriority="high"{% endif %}
+            >
+          {%- elsif block.settings.image_url != blank -%}
+            <img
+              src="{{ block.settings.image_url }}"
+              alt="{{ block.settings.title }}"
+              width="1920"
+              height="780"
+              loading="{%- if forloop.first -%}eager{%- else -%}lazy{%- endif -%}"
+              {% if forloop.first %}fetchpriority="high"{% endif %}
+            >
+          {%- endif -%}
+          <div class="hero-slider__overlay"></div>
+        </div>
+        <div class="hero-slider__content">
+          <div class="hero-slider__text">
+            {%- if block.settings.subtitle != blank -%}
+              <p class="hero-slider__subtitle hide-mobile">{{ block.settings.subtitle }}</p>
+            {%- endif -%}
+            {%- if block.settings.mobile_subtitle != blank -%}
+              <p class="hero-slider__subtitle hide-desktop">{{ block.settings.mobile_subtitle }}</p>
+            {%- endif -%}
+            <h1 class="hero-slider__title">{{ block.settings.mobile_title | default: block.settings.title }}</h1>
+            {%- if block.settings.description != blank -%}
+              <p class="hero-slider__description hide-mobile">{{ block.settings.description }}</p>
+            {%- endif -%}
+            {%- if block.settings.mobile_description != blank -%}
+              <p class="hero-slider__description hide-desktop">{{ block.settings.mobile_description }}</p>
+            {%- endif -%}
+            {%- if block.settings.cta_label != blank -%}
+              <a class="hero-slider__cta" href="{{ block.settings.cta_link | default: routes.collections_url | append: '/all' }}">
+                {{ block.settings.cta_label }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
 
+  {%- comment -%} Previous / Next arrows {%- endcomment -%}
+  <button class="hero-slider__arrow hero-slider__arrow--prev" aria-label="Previous slide">
+    <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+  <button class="hero-slider__arrow hero-slider__arrow--next" aria-label="Next slide">
+    <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  </button>
+
+  {%- comment -%} Navigation dots {%- endcomment -%}
+  <div class="hero-slider__dots" role="tablist" aria-label="Slide navigation">
+    {%- for block in section.blocks -%}
+      <button class="hero-slider__dot" role="tab" aria-label="Go to slide {{ forloop.index }}"></button>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "asset_image",
+          "label": "Theme Asset Image (filename, e.g. hero-1.webp)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "image_url",
+          "label": "Image URL (fallback)"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Next Generation Electric Bikes"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Explore the Future"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Experience unmatched performance and style"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Text (optional)"
+        },
+        {
+          "type": "text",
+          "id": "mobile_subtitle",
+          "label": "Mobile Subtitle"
+        },
+        {
+          "type": "text",
+          "id": "mobile_title",
+          "label": "Mobile Title"
+        },
+        {
+          "type": "text",
+          "id": "mobile_description",
+          "label": "Mobile Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "subtitle": "Next Generation Electric Bikes",
+            "title": "Explore the Future",
+            "description": "Experience unmatched performance and style",
+            "cta_label": "Shop Now",
+            "image_url": "https://images.unsplash.com/photo-1668106601849-e21e72c2c563?fit=max&w=1920&q=80"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "subtitle": "Smart Commuting Solutions",
+            "title": "Urban Mobility",
+            "description": "Navigate the city with ease and efficiency",
+            "cta_label": "Discover More",
+            "image_url": "https://images.unsplash.com/photo-1625090665908-9e61b01aba6c?fit=max&w=1920&q=80"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "subtitle": "Off-Road Excellence",
+            "title": "Adventure Awaits",
+            "description": "Conquer any terrain with confidence",
+            "cta_label": "Explore Models",
+            "image_url": "https://images.unsplash.com/photo-1673969539424-23f163191b1e?fit=max&w=1920&q=80"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

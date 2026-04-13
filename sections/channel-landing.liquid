@@ -1,0 +1,405 @@
+{%- liquid
+  assign product = all_products[section.settings.product_handle]
+  assign channel = section.settings.channel
+  assign discount_code = section.settings.discount_code
+  assign headline = section.settings.headline | default: product.title
+  assign subheading = section.settings.subheading
+  assign discount_url = '/discount/' | append: discount_code | append: '?redirect=' | append: product.url
+-%}
+
+<style>
+  .channel-lp {
+    font-family: 'Montserrat', sans-serif;
+    color: #111;
+  }
+
+  /* ── Announcement bar ── */
+  .channel-lp__bar {
+    background: #111;
+    color: #fff;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .channel-lp__bar strong {
+    color: #ef4444;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Hero ── */
+  .channel-lp__hero {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .channel-lp__hero {
+      grid-template-columns: 1fr 1fr;
+      min-height: 540px;
+    }
+  }
+
+  .channel-lp__hero-image {
+    background: #f3f3f3;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+  @media (min-width: 768px) {
+    .channel-lp__hero-image { aspect-ratio: auto; }
+  }
+  .channel-lp__hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .channel-lp__hero-content {
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .channel-lp__hero-content { padding: 3rem 2.5rem; }
+  }
+
+  /* ── Channel badge ── */
+  .channel-lp__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    width: fit-content;
+  }
+  .channel-lp__badge--youtube { background: #ff0000; }
+  .channel-lp__badge--tiktok  { background: #010101; }
+
+  /* ── Title ── */
+  .channel-lp__title {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    color: #111;
+  }
+  @media (min-width: 768px) {
+    .channel-lp__title { font-size: 2.5rem; }
+  }
+  .channel-lp--tiktok .channel-lp__title {
+    font-size: 2.25rem;
+    font-weight: 800;
+  }
+
+  .channel-lp__subheading {
+    font-size: 1rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  /* ── Price ── */
+  .channel-lp__price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
+  }
+  .channel-lp__price s {
+    font-size: 1rem;
+    color: #999;
+    font-weight: 400;
+    margin-right: 0.4rem;
+  }
+
+  /* ── Discount code box ── */
+  .channel-lp__code-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #fff7ed;
+    border: 1.5px dashed #ef4444;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+  }
+  .channel-lp__code-box span {
+    font-size: 0.875rem;
+    color: #555;
+    flex: 1;
+  }
+  .channel-lp__code-box strong {
+    font-size: 1.1rem;
+    color: #ef4444;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .channel-lp__copy-btn {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 0.4rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  .channel-lp__copy-btn:hover { background: #dc2626; }
+  .channel-lp__copy-btn.copied { background: #16a34a; }
+
+  /* ── CTA button ── */
+  .channel-lp__cta-btn {
+    display: block;
+    background: #111;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .channel-lp__cta-btn:hover {
+    background: #ef4444;
+    transform: translateY(-1px);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* ── Features ── */
+  .channel-lp__features {
+    background: #f9f9f9;
+    padding: 3rem 1.5rem;
+  }
+  .channel-lp__features-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 2rem;
+  }
+  .channel-lp__features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.25rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .channel-lp__feature {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .channel-lp__feature-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .channel-lp__feature-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .channel-lp__feature-desc {
+    font-size: 0.875rem;
+    color: #666;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ── Bottom CTA ── */
+  .channel-lp__bottom-cta {
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    background: #111;
+    color: #fff;
+  }
+  .channel-lp__bottom-cta h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+  }
+  .channel-lp__bottom-cta p {
+    color: rgba(255,255,255,0.65);
+    margin: 0 0 1.75rem;
+    font-size: 0.95rem;
+  }
+  .channel-lp__bottom-cta p strong {
+    color: #ef4444;
+  }
+  .channel-lp__bottom-cta .channel-lp__cta-btn {
+    background: #ef4444;
+    display: inline-block;
+    max-width: 380px;
+    width: 100%;
+  }
+  .channel-lp__bottom-cta .channel-lp__cta-btn:hover {
+    background: #dc2626;
+  }
+</style>
+
+<div class="channel-lp channel-lp--{{ channel }}">
+
+  {%- comment -%} Announcement bar {%- endcomment -%}
+  <div class="channel-lp__bar">
+    {%- if channel == 'youtube' -%}
+      📺 As seen on YouTube &nbsp;·&nbsp;
+    {%- elsif channel == 'tiktok' -%}
+      🎵 As seen on TikTok &nbsp;·&nbsp;
+    {%- endif -%}
+    Use code <strong>{{ discount_code }}</strong> for 10% off
+  </div>
+
+  {%- comment -%} Hero {%- endcomment -%}
+  <div class="channel-lp__hero">
+    <div class="channel-lp__hero-image">
+      {%- if product != blank and product.featured_image -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 900 }}"
+          srcset="{{ product.featured_image | image_url: width: 450 }} 450w,
+                  {{ product.featured_image | image_url: width: 900 }} 900w,
+                  {{ product.featured_image | image_url: width: 1400 }} 1400w"
+          sizes="(max-width: 767px) 100vw, 50vw"
+          alt="{{ product.title | escape }}"
+          width="900"
+          height="675"
+          loading="eager"
+          fetchpriority="high"
+        >
+      {%- endif -%}
+    </div>
+
+    <div class="channel-lp__hero-content">
+      {%- if channel == 'youtube' -%}
+        <span class="channel-lp__badge channel-lp__badge--youtube">
+          <svg width="13" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+            <path d="M13.66 1.56A1.75 1.75 0 0 0 12.44.34C11.36 0 7 0 7 0S2.64 0 1.56.34A1.75 1.75 0 0 0 .34 1.56C0 2.64 0 5 0 5s0 2.36.34 3.44A1.75 1.75 0 0 0 1.56 9.66C2.64 10 7 10 7 10s4.36 0 5.44-.34a1.75 1.75 0 0 0 1.22-1.22C14 7.36 14 5 14 5s0-2.36-.34-3.44ZM5.6 7.14V2.86L9.27 5l-3.67 2.14Z" fill="currentColor"/>
+          </svg>
+          As seen on YouTube
+        </span>
+      {%- elsif channel == 'tiktok' -%}
+        <span class="channel-lp__badge channel-lp__badge--tiktok">
+          🎵 As seen on TikTok
+        </span>
+      {%- endif -%}
+
+      <h1 class="channel-lp__title">{{ headline }}</h1>
+      <p class="channel-lp__subheading">{{ subheading }}</p>
+
+      {%- if product != blank -%}
+        <p class="channel-lp__price">
+          {%- if product.compare_at_price > product.price -%}
+            <s>{{ product.compare_at_price | money }}</s>
+          {%- endif -%}
+          {{ product.price | money }}
+        </p>
+      {%- endif -%}
+
+      <div class="channel-lp__code-box">
+        <span>Exclusive code: <strong>{{ discount_code }}</strong></span>
+        <button class="channel-lp__copy-btn js-copy-code" data-code="{{ discount_code }}">Copy</button>
+      </div>
+
+      <a href="{{ discount_url }}" class="channel-lp__cta-btn">
+        Get 10% Off — Shop Now →
+      </a>
+    </div>
+  </div>
+
+  {%- comment -%} Features {%- endcomment -%}
+  {%- if section.blocks.size > 0 -%}
+    <div class="channel-lp__features">
+      {%- if product != blank -%}
+        <h2 class="channel-lp__features-title">Why the {{ product.title | truncate: 35, '' | strip }}</h2>
+      {%- endif -%}
+      <div class="channel-lp__features-grid">
+        {%- for block in section.blocks -%}
+          <div class="channel-lp__feature" {{ block.shopify_attributes }}>
+            <span class="channel-lp__feature-icon">{{ block.settings.icon }}</span>
+            <div class="channel-lp__feature-title">{{ block.settings.title }}</div>
+            <p class="channel-lp__feature-desc">{{ block.settings.description }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Bottom CTA {%- endcomment -%}
+  <div class="channel-lp__bottom-cta">
+    <h2>Ready to ride?</h2>
+    <p>Use code <strong>{{ discount_code }}</strong> at checkout — 10% off your order</p>
+    <a href="{{ discount_url }}" class="channel-lp__cta-btn">
+      Shop Now — Use {{ discount_code }}
+    </a>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.js-copy-code').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var code = this.dataset.code;
+      navigator.clipboard.writeText(code).then(function () {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Channel Landing Page",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        { "type": "text", "id": "icon",        "label": "Icon (emoji)", "default": "⚡" },
+        { "type": "text", "id": "title",       "label": "Title" },
+        { "type": "text", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "channel",
+      "label": "Traffic Channel",
+      "options": [
+        { "value": "youtube", "label": "YouTube" },
+        { "value": "tiktok",  "label": "TikTok" }
+      ],
+      "default": "youtube"
+    },
+    { "type": "text",     "id": "product_handle", "label": "Product Handle" },
+    { "type": "text",     "id": "discount_code",  "label": "Discount Code", "default": "YT10" },
+    { "type": "text",     "id": "headline",       "label": "Headline" },
+    { "type": "textarea", "id": "subheading",     "label": "Subheading" }
+  ],
+  "presets": [
+    { "name": "Channel Landing Page" }
+  ]
+}
+{% endschema %}
