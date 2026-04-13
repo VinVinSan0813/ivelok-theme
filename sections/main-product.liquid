@@ -289,6 +289,21 @@
   </div>
 {%- endif -%}
 
+{%- assign mobile_detail_images = product.metafields.custom.detail_images_mobile.value -%}
+{%- assign mobile_detail_images_resolved = mobile_detail_images | default: detail_images_pc -%}
+{%- if mobile_detail_images_resolved != blank -%}
+  <div id="product-detail-images-mobile">
+    {%- for img in mobile_detail_images_resolved -%}
+      <img
+        src="{{ img | image_url: width: 800 }}"
+        alt="{{ product.title | escape }} detail {{ forloop.index }}"
+        loading="lazy"
+        width="800"
+      >
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
 <script>
 (function () {
   /* ── Data ── */

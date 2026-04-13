@@ -2260,6 +2260,26 @@ h4 {
   height: auto;
 }
 
+/* ── Mobile Detail Images ── */
+#product-detail-images-mobile {
+  display: none;
+  width: 100%;
+  line-height: 0;
+  font-size: 0;
+}
+
+#product-detail-images-mobile img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  #product-detail-images { display: none; }
+  #product-detail-images-mobile { display: block; }
+}
+
 /* ── Gallery Arrows ── */
 .gallery-arrow {
   position: absolute;
