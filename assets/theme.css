@@ -1524,13 +1524,18 @@ h4 {
 }
 
 .product-info__title {
-  font-size: 2rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
+  font-size: 28.28px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
-@media (min-width: 640px) {
-  .product-info__title { font-size: 2.5rem; }
+.product-info__subtitle {
+  font-size: 19.87px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 1rem;
 }
 
 .product-info__rating {

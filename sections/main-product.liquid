@@ -1,5 +1,6 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
+  assign subtitle        = product.metafields.custom.subtitle.value
   assign badge           = product.metafields.custom.badge.value
   assign rating          = product.metafields.custom.rating.value | default: 0 | times: 1
   assign review_count    = product.metafields.custom.review_count.value | default: 0
@@ -105,6 +106,9 @@
       <div class="animate-from-right">
         <div class="product-info__category">{{ product.type | default: product.tags.first }}</div>
         <h1 class="product-info__title">{{ product.title }}</h1>
+        {%- if subtitle != blank -%}
+          <h2 class="product-info__subtitle">{{ subtitle }}</h2>
+        {%- endif -%}
 
         <div class="product-info__rating">
           {%- if rating > 0 -%}
